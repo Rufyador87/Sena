@@ -1,80 +1,156 @@
-# OptiLogistics - Módulo Web MVC (JDBC)
+# OptiLogistics - Módulo Web Full Stack
 
-Aplicación web Java para la gestión logística con arquitectura **MVC**, enfocada en el módulo funcional de **Gestión de Vehículos** (registro, consulta, edición y eliminación).
+Módulo web empresarial para gestión logística en CEDI, con enfoque en:
 
-## Tecnologías usadas
+- Gestión de turnos de atención.
+- Asignación de muelles.
+- Seguimiento operativo de vehículos.
+- Administración de órdenes de carga/descarga.
+- Control de acceso por roles.
 
-- Java 17
-- Jakarta Servlet / JSP (Tomcat 10+)
-- JDBC
-- MySQL 8+
-- Maven (empaquetado WAR)
-- HTML + CSS
+Se implementó una arquitectura tipo **Clean + MVC por capas**:
 
-## Arquitectura del proyecto
+- **Presentación**: React + Bootstrap.
+- **Negocio**: Node.js + Express (servicios y controladores).
+- **Persistencia**: PostgreSQL (repositorios SQL).
+
+> Nota de ingeniería: al no contar con todos los artefactos del ciclo de vida en el repositorio, se infirió el dominio con prácticas típicas de operación logística empresarial (entidades, flujos CRUD, seguridad y trazabilidad base).
+
+---
+
+## Estructura del repositorio
 
 ```text
-src/
-└── main/
-    ├── java/
-    │   └── com/optilogistics/
-    │       ├── modelo/       -> Entidades de dominio
-    │       ├── dao/          -> Acceso a datos y conexión JDBC
-    │       └── controlador/  -> Servlets (controladores MVC)
-    └── webapp/
-        ├── views/
-        │   └── vehiculos/    -> Vistas JSP
-        ├── css/              -> Estilos
-        └── WEB-INF/
-            └── web.xml
+.
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── db/
+│   │   ├── middlewares/
+│   │   ├── repositories/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── app.js
+│   │   └── server.js
+│   ├── .env.example
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   ├── router/
+│   │   └── styles/
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+├── database/
+│   └── schema.sql
+└── README.md
 ```
 
-## Funcionalidad implementada
+---
 
-### Módulo: Gestión de Vehículos
+## Tecnologías
 
-- Crear vehículo
-- Listar vehículos
-- Editar vehículo
-- Eliminar vehículo
+### Backend
 
-## Configuración de base de datos
+- Node.js 20+
+- Express
+- PostgreSQL
+- JWT para autenticación
+- bcrypt para hash de contraseña
 
-1. Crear base y tabla ejecutando:
+### Frontend
 
-```sql
-source database/schema.sql
-```
+- React 18
+- React Router DOM
+- Axios
+- Bootstrap 5
+- Vite
 
-2. Ajustar credenciales JDBC en:
+---
 
-- `src/main/java/com/optilogistics/dao/ConexionBD.java`
+## Funcionalidades implementadas
 
-> Por defecto:
-> - URL: `jdbc:mysql://localhost:3306/optilogistics?useSSL=false&serverTimezone=UTC`
-> - Usuario: `root`
-> - Clave: `root`
+### Seguridad
 
-## Ejecución
+- Login con JWT.
+- Roles soportados: `conductor`, `operador`, `facturador`, `coordinador`, `seguridad`.
+- Protección de rutas backend y frontend.
+- Protección de vistas por sesión autenticada.
 
-1. Compilar y empaquetar WAR:
+### CRUD REST completo
+
+- `users`
+- `vehicles`
+- `shifts`
+- `docks`
+- `load_orders`
+
+Operaciones soportadas en cada recurso:
+
+- `POST /api/<resource>`
+- `GET /api/<resource>`
+- `GET /api/<resource>/:id`
+- `PUT /api/<resource>/:id`
+- `PATCH /api/<resource>/:id`
+- `DELETE /api/<resource>/:id`
+
+---
+
+## Base de datos
+
+1. Crear el esquema ejecutando:
 
 ```bash
-mvn clean package
+psql -U postgres -f database/schema.sql
 ```
 
-2. Desplegar `target/optilogistics.war` en Apache Tomcat.
+2. Crear primer usuario (bootstrap) con `POST /api/auth/register` y rol `coordinador` para gestionar alta de usuarios posteriores.
 
-3. Abrir en navegador:
+---
+
+## Instalación y ejecución
+
+### 1) Backend
+
+```bash
+cd backend
+cp .env.example .env
+npm install
+npm run dev
+```
+
+API disponible en:
 
 ```text
-http://localhost:8080/optilogistics/vehiculos
+http://localhost:4000/api
 ```
 
-## Buenas prácticas aplicadas
+### 2) Frontend
 
-- Separación por capas (Modelo, DAO, Controlador, Vista)
-- Uso de `PreparedStatement` para prevenir inyección SQL
-- Uso de `try-with-resources` para cerrar conexiones y recursos JDBC
-- Nombres de clases y métodos coherentes con estándares Java
-- Código modular, legible y mantenible
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Aplicación disponible en:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## Estándares aplicados
+
+- Convenciones de nombre consistentes (`camelCase`, `PascalCase`).
+- Manejo estructurado de errores con middleware global.
+- Separación por capas y responsabilidades.
+- Endpoints REST alineados con buenas prácticas de mantenibilidad.
+- Código orientado a extensibilidad para próximos módulos (KPIs, tablero en tiempo real, integración GPS).
