@@ -1,54 +1,80 @@
-\# Proyecto de Control de Versiones con Git
+# OptiLogistics - Módulo Web MVC (JDBC)
 
+Aplicación web Java para la gestión logística con arquitectura **MVC**, enfocada en el módulo funcional de **Gestión de Vehículos** (registro, consulta, edición y eliminación).
 
+## Tecnologías usadas
 
-\## Autor
+- Java 17
+- Jakarta Servlet / JSP (Tomcat 10+)
+- JDBC
+- MySQL 8+
+- Maven (empaquetado WAR)
+- HTML + CSS
 
-Oscar Reyes Correa
+## Arquitectura del proyecto
 
+```text
+src/
+└── main/
+    ├── java/
+    │   └── com/optilogistics/
+    │       ├── modelo/       -> Entidades de dominio
+    │       ├── dao/          -> Acceso a datos y conexión JDBC
+    │       └── controlador/  -> Servlets (controladores MVC)
+    └── webapp/
+        ├── views/
+        │   └── vehiculos/    -> Vistas JSP
+        ├── css/              -> Estilos
+        └── WEB-INF/
+            └── web.xml
+```
 
+## Funcionalidad implementada
 
-\## Descripción
+### Módulo: Gestión de Vehículos
 
-Este proyecto fue desarrollado como evidencia de desempeño para la actividad GA7-220501096-AA1-EV04 del programa de formación.
+- Crear vehículo
+- Listar vehículos
+- Editar vehículo
+- Eliminar vehículo
 
+## Configuración de base de datos
 
+1. Crear base y tabla ejecutando:
 
-El objetivo del proyecto es realizar la instalación, configuración y uso de la herramienta de control de versiones Git, tanto en entorno local como remoto utilizando la plataforma GitHub.
+```sql
+source database/schema.sql
+```
 
+2. Ajustar credenciales JDBC en:
 
+- `src/main/java/com/optilogistics/dao/ConexionBD.java`
 
-\## Herramientas utilizadas
+> Por defecto:
+> - URL: `jdbc:mysql://localhost:3306/optilogistics?useSSL=false&serverTimezone=UTC`
+> - Usuario: `root`
+> - Clave: `root`
 
+## Ejecución
 
+1. Compilar y empaquetar WAR:
 
-\- Git
+```bash
+mvn clean package
+```
 
-\- Git Bash
+2. Desplegar `target/optilogistics.war` en Apache Tomcat.
 
-\- GitHub
+3. Abrir en navegador:
 
-\- Windows
+```text
+http://localhost:8080/optilogistics/vehiculos
+```
 
+## Buenas prácticas aplicadas
 
-
-\## Comandos utilizados
-
-
-
-git init
-
-git add .
-
-git commit -m "Primer commit"
-
-git push
-
-
-
-\## Evidencia de integración
-
-
-
-Se realizó la conexión entre el repositorio local y el repositorio remoto para gestionar versiones del proyecto.
-
+- Separación por capas (Modelo, DAO, Controlador, Vista)
+- Uso de `PreparedStatement` para prevenir inyección SQL
+- Uso de `try-with-resources` para cerrar conexiones y recursos JDBC
+- Nombres de clases y métodos coherentes con estándares Java
+- Código modular, legible y mantenible
