@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OptiLogistics | Inicio de sesión</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="profile">👤 <span>Rol</span></div>
+      <div class="status">Estado: <span class="dot"></span></div>
+      <div class="actions">🔔 ❔</div>
+    </header>
+
+    <nav class="main-nav">
+      <a href="index.html" class="active">Inicio</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="usuario.html">Usuario</a>
+      <a href="vehiculos.html">Vehículos</a>
+      <a href="novedades.html">Novedades</a>
+      <a href="turnos.html">Turnos</a>
+      <a href="gps.html">GPS</a>
+    </nav>
+
+    <main class="container auth-layout">
+      <section class="logo-card">
+        <h1>Opti<span>Logistics</span></h1>
+        <p>Sistema Logístico Inteligente</p>
+      </section>
+
+      <section class="card">
+        <h2>Iniciar sesión</h2>
+        <form class="form-grid" onsubmit="return fakeLogin(event)">
+          <label for="usuario">Usuario</label>
+          <input id="usuario" type="text" required placeholder="Ingresa tu usuario" />
+
+          <label for="clave">Clave</label>
+          <input id="clave" type="password" required placeholder="••••••••" />
+
+          <button type="submit" class="primary-btn">Login</button>
+        </form>
+        <p class="links"><a href="#">¿Olvidó la clave?</a> · <a href="#">Registrarse</a></p>
+        <div class="quick-access">
+          <p>Acceso rápido con:</p>
+          <div class="social-icons"><span>📧</span><span>📘</span></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
